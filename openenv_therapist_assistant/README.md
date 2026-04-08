@@ -9,12 +9,40 @@ app_port: 8000
 base_path: /web
 tags:
   - openenv
+    - therapist
+    - assistant
+    - actions
+short_description: Therapist-assistant env with configurable action fields
 ---
 
 # Openenv Therapist Assistant Environment
 
 A therapist-assistant training environment with structured, discriminated actions keyed by `action_type`.
 The current environment behavior converts each action into an echoed summary string so you can quickly validate action payloads and server/client wiring.
+
+## Action Fields
+
+Use these fields to configure actions from the Space frontend:
+
+| action_type | Required fields | Optional fields |
+|---|---|---|
+| `check_in` | `prompt` | `mood_scale_1_10`, `energy_scale_1_10`, `sleep_quality_1_10` |
+| `ask_open_question` | `question_text`, `focus_area` | - |
+| `reflect_content` | `reflection_text` | `source_span` |
+| `reflect_emotion` | `emotion_labels`, `reflection_text`, `confidence_0_1` | - |
+| `validate_experience` | `validation_text` | `context_reference` |
+| `summarize_session` | `summary_text` | `key_points`, `open_items` |
+| `clarify_or_probe` | `question_text`, `reason_for_probe` | - |
+| `risk_screen` | `risk_domain`, `screening_question`, `urgency_level` | - |
+| `safety_plan_step` | `step_type`, `step_text` | - |
+| `psychoeducation` | `topic`, `content_text` | `reading_level` |
+| `coping_skill_coach` | `skill_name`, `instructions`, `duration_minutes` | - |
+| `goal_set` | `goal_text`, `time_horizon`, `success_criteria` | - |
+| `home_practice_assign` | `practice_name`, `instructions`, `frequency`, `tracking_method` | - |
+| `resource_recommend` | `resource_type`, `resource_details`, `reason` | - |
+| `handoff_or_escalate` | `escalation_reason`, `target`, `handoff_message` | - |
+
+The Space frontend can use these fields to build action forms, validate payloads, and guide manual testing.
 
 ## Quick Start
 

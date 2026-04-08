@@ -1,7 +1,46 @@
 spec_version: 1
 name: openenv_therapist_assistant
+description: Therapist-assistant environment with configurable action fields exposed in the Space frontend
 type: space
 runtime: fastapi
 app: server.app:app
 port: 8000
+
+entrypoints:
+  http:
+    base_url: http://localhost:8000
+
+tasks:
+  - name: engagement
+    description: Build rapport and capture the client's current state using check_in and open_question actions
+    actions:
+      - check_in
+      - ask_open_question
+      - reflect_content
+  - name: formulation
+    description: Reflect, validate, and summarize to shape a working formulation
+    actions:
+      - reflect_emotion
+      - validate_experience
+      - summarize_session
+      - clarify_or_probe
+  - name: safety_and_planning
+    description: Handle risk, safety planning, goals, and follow-up actions
+    actions:
+      - risk_screen
+      - safety_plan_step
+      - coping_skill_coach
+      - goal_set
+      - home_practice_assign
+      - resource_recommend
+      - handoff_or_escalate
+
+interface:
+  reset: POST /reset
+  step: POST /step
+  state: GET /state
+
+requirements:
+  deterministic: true
+  max_steps: 20
 
