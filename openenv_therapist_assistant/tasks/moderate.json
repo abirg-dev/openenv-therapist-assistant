@@ -1,0 +1,77 @@
+[
+  {
+    "task_id": "MOD-001",
+    "title": "Define a vague problem",
+    "difficulty": "moderate",
+    "client_message": "I keep saying I feel stuck, but I’m not sure what that really means. I just know something is off.",
+    "objective": "Clarify the underlying problem and identify contributing factors.",
+    "success_criteria": [
+      "Explores the vague statement with follow-up questions",
+      "Reflects the client’s experience",
+      "Produces a more precise problem definition"
+    ],
+    "target_actions": ["ask_open_question", "clarify_or_probe", "reflect_content", "summarize_session"],
+    "risk_level": "low",
+    "reward_config": {
+      "weights": {
+        "quality": 0.35,
+        "flow": 0.21
+      },
+      "action_bonus": {
+        "clarify_or_probe": 0.08,
+        "reflect_content": 0.06
+      },
+      "required_keywords": ["stuck", "off", "means"]
+    }
+  },
+  {
+    "task_id": "MOD-002",
+    "title": "Prioritize competing concerns",
+    "difficulty": "moderate",
+    "client_message": "I have too many things going on: my job, my family, and my mood are all getting worse at the same time.",
+    "objective": "Help the client choose the most important issue to focus on first.",
+    "success_criteria": [
+      "Identifies multiple concerns",
+      "Prioritizes one focus area",
+      "Maintains a supportive tone"
+    ],
+    "target_actions": ["ask_open_question", "reflect_emotion", "summarize_session", "goal_set"],
+    "risk_level": "none",
+    "reward_config": {
+      "weights": {
+        "quality": 0.34,
+        "coherence": 0.19
+      },
+      "action_bonus": {
+        "reflect_emotion": 0.08,
+        "goal_set": 0.05
+      },
+      "required_keywords": ["job", "family", "mood"]
+    }
+  },
+  {
+    "task_id": "MOD-003",
+    "title": "Plan a coping step",
+    "difficulty": "moderate",
+    "client_message": "When I get overwhelmed I shut down and stop doing the things that help me. I need a better plan.",
+    "objective": "Translate the problem into one coping skill and one home practice step.",
+    "success_criteria": [
+      "Names a relevant coping strategy",
+      "Adds a practical between-session action",
+      "Explains when the client should use it"
+    ],
+    "target_actions": ["coping_skill_coach", "home_practice_assign", "summarize_session"],
+    "risk_level": "none",
+    "reward_config": {
+      "weights": {
+        "quality": 0.36,
+        "flow": 0.20
+      },
+      "action_bonus": {
+        "coping_skill_coach": 0.09,
+        "home_practice_assign": 0.09
+      },
+      "required_keywords": ["overwhelmed", "plan", "help"]
+    }
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "task_id": "EASY-001",
+    "title": "Build rapport and check in",
+    "difficulty": "easy",
+    "client_message": "I’m new here and not really sure how to start. I’ve been stressed lately but I’m open to talking.",
+    "objective": "Establish rapport, acknowledge the client’s feelings, and ask one open-ended question.",
+    "success_criteria": [
+      "Begins with a warm check-in or acknowledgement",
+      "Uses at least one open-ended question",
+      "Reflects or validates the client’s state"
+    ],
+    "target_actions": ["check_in", "ask_open_question", "reflect_emotion", "validate_experience"],
+    "risk_level": "low",
+    "reward_config": {
+      "weights": {
+        "quality": 0.36,
+        "flow": 0.20,
+        "safety": 0.22
+      },
+      "action_bonus": {
+        "check_in": 0.10,
+        "ask_open_question": 0.06
+      },
+      "required_keywords": ["feel", "stress", "week"],
+      "forbidden_phrases": ["get over it"]
+    }
+  },
+  {
+    "task_id": "EASY-002",
+    "title": "List the main problems",
+    "difficulty": "easy",
+    "client_message": "Lately I have been dealing with sleep issues, tension with my partner, and pressure at work. It all feels mixed together.",
+    "objective": "Help the client list and organize their main concerns.",
+    "success_criteria": [
+      "Names the main concerns clearly",
+      "Separates the issues into a short list",
+      "Ends with a concise summary"
+    ],
+    "target_actions": ["ask_open_question", "clarify_or_probe", "summarize_session"],
+    "risk_level": "none",
+    "reward_config": {
+      "weights": {
+        "quality": 0.34,
+        "flow": 0.23
+      },
+      "action_bonus": {
+        "clarify_or_probe": 0.08,
+        "summarize_session": 0.06
+      },
+      "action_penalty": {
+        "check_in": 0.06
+      },
+      "required_keywords": ["sleep", "work", "partner"]
+    }
+  },
+  {
+    "task_id": "EASY-003",
+    "title": "Set one small goal",
+    "difficulty": "easy",
+    "client_message": "I want to do better this week, but I don’t know where to start. I just want something realistic.",
+    "objective": "Convert a vague desire into one small, achievable goal.",
+    "success_criteria": [
+      "Produces one concrete goal",
+      "Goal has a short time horizon",
+      "Includes at least one success criterion"
+    ],
+    "target_actions": ["summarize_session", "goal_set"],
+    "risk_level": "none",
+    "reward_config": {
+      "weights": {
+        "quality": 0.35,
+        "flow": 0.20
+      },
+      "action_bonus": {
+        "goal_set": 0.10,
+        "summarize_session": 0.07
+      },
+      "required_keywords": ["week", "goal", "realistic"]
+    }
+  }
+]
