@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+openenv_therapist_assistant/openenv_openenv_therapist_assistant.egg-info/

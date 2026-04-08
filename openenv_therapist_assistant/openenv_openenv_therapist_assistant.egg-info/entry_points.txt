@@ -1,2 +1,0 @@
-[console_scripts]
-server = openenv_therapist_assistant.server.app:main
