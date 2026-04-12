@@ -33,6 +33,10 @@ import os
 from pathlib import Path
 from typing import Any, Literal
 
+# Force the plain FastAPI app so our custom therapist UI is visible on Spaces.
+# This must be set before importing create_app so framework initialization sees it.
+os.environ["ENABLE_WEB_INTERFACE"] = "false"
+
 try:
     from openenv.core.env_server.http_server import create_app
 except Exception as e:  # pragma: no cover
@@ -61,10 +65,6 @@ os.environ.setdefault(
     "ENV_README_PATH",
     str(Path(__file__).resolve().parent.parent / "README.md"),
 )
-
-# Force the plain FastAPI app so our custom therapist UI is visible on Spaces.
-# The framework web UI would otherwise own /web and shadow this app's therapist-facing page.
-os.environ["ENABLE_WEB_INTERFACE"] = "false"
 
 
 # Create the app with web interface and README integration

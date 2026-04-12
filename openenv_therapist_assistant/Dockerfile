@@ -71,6 +71,9 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Set PYTHONPATH to /app so the copied package at /app/env is importable as `env`
 ENV PYTHONPATH="/app:$PYTHONPATH"
 
+# Force framework plain FastAPI mode in container runtime.
+ENV ENABLE_WEB_INTERFACE="false"
+
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
