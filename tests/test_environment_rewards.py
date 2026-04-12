@@ -6,6 +6,7 @@ from openenv_therapist_assistant.models import (
     ClarifyOrProbeAction,
     GoalSetAction,
     HandoffOrEscalateAction,
+    HomePracticeAssignAction,
     PsychoeducationAction,
     ReflectContentAction,
     ReflectEmotionAction,
@@ -194,3 +195,78 @@ def test_reflect_emotion_and_summary_are_positive_when_reasonable() -> None:
 
     assert reflect_reward > 0
     assert summary_reward > 0
+
+
+def test_easy_002_completes_on_summarize_session() -> None:
+    env = OpenenvTherapistAssistantEnvironment()
+    env.reset(seed=1, difficulty="easy")
+
+    start = env.step(
+        AskOpenQuestionAction(
+            question_text="What are the top concerns to focus on?",
+            focus_area="event",
+        )
+    )
+    assert start.done is False
+
+    result = env.step(
+        SummarizeSessionAction(
+            summary_text="You identified sleep, work pressure, and relationship tension.",
+            key_points=["sleep", "work", "partner"],
+            open_items=["which concern to address first"],
+        )
+    )
+    assert result.done is True
+
+
+def test_mod_002_completes_on_goal_set() -> None:
+    env = OpenenvTherapistAssistantEnvironment()
+    env.reset(seed=1, difficulty="moderate")
+
+    result = env.step(
+        GoalSetAction(
+            goal_text="Pick one priority concern and take one action this week.",
+            time_horizon="this_week",
+            success_criteria="Choose one area and complete one concrete step.",
+        )
+    )
+    assert result.done is True
+
+
+def test_hard_003_completes_on_goal_or_home_practice() -> None:
+    goal_env = OpenenvTherapistAssistantEnvironment()
+    goal_env.reset(seed=2, difficulty="hard")
+    goal_done = goal_env.step(
+        GoalSetAction(
+            goal_text="Start with one sleep-support habit this week.",
+            time_horizon="this_week",
+            success_criteria="Follow the habit on at least four days.",
+        )
+    )
+    assert goal_done.done is True
+
+    homework_env = OpenenvTherapistAssistantEnvironment()
+    homework_env.reset(seed=2, difficulty="hard")
+    homework_done = homework_env.step(
+        HomePracticeAssignAction(
+            practice_name="Wind-down routine",
+            instructions="Do a 10-minute wind-down before bedtime.",
+            frequency="daily",
+            tracking_method="Mark completion in a notes app.",
+        )
+    )
+    assert homework_done.done is True
+
+
+def test_hard_002_remains_non_terminal_for_reflect_emotion() -> None:
+    env = OpenenvTherapistAssistantEnvironment()
+    env.reset(seed=1, difficulty="hard")
+
+    result = env.step(
+        ReflectEmotionAction(
+            emotion_labels=["frustrated"],
+            reflection_text="It sounds frustrating to feel asked the same questions repeatedly.",
+            confidence_0_1=0.8,
+        )
+    )
+    assert result.done is False

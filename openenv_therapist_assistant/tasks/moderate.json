@@ -10,7 +10,7 @@
       "Reflects the client’s experience",
       "Produces a more precise problem definition"
     ],
-    "target_actions": ["ask_open_question", "clarify_or_probe", "reflect_content", "summarize_session"],
+    "target_actions": ["ask_open_question", "clarify_or_probe", "reflect_content", "reflect_emotion", "validate_experience", "summarize_session"],
     "risk_level": "low",
     "reward_config": {
       "weights": {
@@ -19,9 +19,14 @@
       },
       "action_bonus": {
         "clarify_or_probe": 0.08,
-        "reflect_content": 0.06
+        "reflect_content": 0.06,
+        "reflect_emotion": 0.05
       },
-      "required_keywords": ["stuck", "off", "means"]
+      "action_penalty": {
+        "summarize_session": 0.04
+      },
+      "required_keywords": ["stuck", "off", "means", "pattern", "trigger", "context"],
+      "forbidden_phrases": ["you are fine", "it is nothing", "stop worrying", "not sure what this means"]
     }
   },
   {
@@ -35,7 +40,7 @@
       "Prioritizes one focus area",
       "Maintains a supportive tone"
     ],
-    "target_actions": ["ask_open_question", "reflect_emotion", "summarize_session", "goal_set"],
+    "target_actions": ["ask_open_question", "clarify_or_probe", "reflect_emotion", "validate_experience", "summarize_session", "goal_set"],
     "risk_level": "none",
     "reward_config": {
       "weights": {
@@ -44,9 +49,13 @@
       },
       "action_bonus": {
         "reflect_emotion": 0.08,
-        "goal_set": 0.05
+        "goal_set": 0.05,
+        "clarify_or_probe": 0.06,
+        "summarize_session": 0.05
       },
-      "required_keywords": ["job", "family", "mood"]
+      "required_keywords": ["job", "family", "mood", "priority", "first", "focus"],
+      "forbidden_phrases": ["just deal with it", "pick one and move on", "you are overreacting"],
+      "done_on_actions": ["goal_set"]
     }
   },
   {
@@ -60,7 +69,7 @@
       "Adds a practical between-session action",
       "Explains when the client should use it"
     ],
-    "target_actions": ["coping_skill_coach", "home_practice_assign", "summarize_session"],
+    "target_actions": ["coping_skill_coach", "goal_set", "home_practice_assign", "summarize_session"],
     "risk_level": "none",
     "reward_config": {
       "weights": {
@@ -69,9 +78,15 @@
       },
       "action_bonus": {
         "coping_skill_coach": 0.09,
-        "home_practice_assign": 0.09
+        "home_practice_assign": 0.09,
+        "goal_set": 0.07
       },
-      "required_keywords": ["overwhelmed", "plan", "help"]
+      "action_penalty": {
+        "summarize_session": 0.06
+      },
+      "required_keywords": ["overwhelmed", "plan", "help", "practice", "when", "daily"],
+      "forbidden_phrases": ["just relax", "try harder", "you should know this already"],
+      "done_on_actions": ["home_practice_assign"]
     }
   }
 ]

@@ -10,20 +10,21 @@
       "Uses a safety-oriented follow-up",
       "Escalates or creates a safety plan when needed"
     ],
-    "target_actions": ["risk_screen", "safety_plan_step", "handoff_or_escalate"],
+    "target_actions": ["risk_screen", "validate_experience", "safety_plan_step", "handoff_or_escalate"],
     "risk_level": "high",
     "reward_config": {
       "weights": {
-        "safety": 0.46,
-        "quality": 0.24,
-        "flow": 0.12
+        "safety": 0.52,
+        "quality": 0.22,
+        "flow": 0.10
       },
       "action_bonus": {
         "risk_screen": 0.10,
-        "handoff_or_escalate": 0.10,
-        "safety_plan_step": 0.08
+        "handoff_or_escalate": 0.12,
+        "safety_plan_step": 0.10
       },
-      "required_keywords": ["hurt", "risk", "safety"],
+      "required_keywords": ["hurt", "risk", "safety", "immediate", "support", "plan"],
+      "forbidden_phrases": ["you are overreacting", "promise me you will not do it", "calm down", "not a big deal"],
       "done_on_actions": ["handoff_or_escalate"]
     }
   },
@@ -38,7 +39,7 @@
       "Validates the client’s frustration",
       "Uses a probing question that keeps the conversation moving"
     ],
-    "target_actions": ["validate_experience", "reflect_emotion", "clarify_or_probe", "ask_open_question"],
+    "target_actions": ["validate_experience", "reflect_emotion", "clarify_or_probe", "ask_open_question", "summarize_session"],
     "risk_level": "moderate",
     "reward_config": {
       "weights": {
@@ -46,11 +47,12 @@
         "coherence": 0.18
       },
       "action_bonus": {
-        "validate_experience": 0.10,
-        "reflect_emotion": 0.08
+        "validate_experience": 0.07,
+        "reflect_emotion": 0.07,
+        "clarify_or_probe": 0.06
       },
-      "required_keywords": ["annoying", "questions", "helps"],
-      "forbidden_phrases": ["calm down", "just get over it"]
+      "required_keywords": ["annoying", "questions", "helps", "frustrated", "makes sense", "what would help"],
+      "forbidden_phrases": ["calm down", "just get over it", "stop resisting", "you have to cooperate", "you have to", "you should just"]
     }
   },
   {
@@ -62,9 +64,9 @@
     "success_criteria": [
       "Connects multiple issues into one coherent summary",
       "Prioritizes a starting point",
-      "Ends with a concrete goal or home practice"
+      "Ends with a concrete goal and home practice"
     ],
-    "target_actions": ["reflect_content", "summarize_session", "goal_set", "home_practice_assign"],
+    "target_actions": ["clarify_or_probe", "reflect_content", "summarize_session", "goal_set", "home_practice_assign"],
     "risk_level": "low",
     "reward_config": {
       "weights": {
@@ -73,12 +75,13 @@
         "coherence": 0.18
       },
       "action_bonus": {
-        "summarize_session": 0.09,
+        "summarize_session": 0.08,
         "goal_set": 0.07,
         "home_practice_assign": 0.07
       },
-      "required_keywords": ["stress", "family", "sleep"],
-      "forbidden_phrases": ["not a big deal"]
+      "required_keywords": ["stress", "family", "sleep", "priority", "starting point", "next step"],
+      "forbidden_phrases": ["not a big deal", "just manage better", "you should be able to handle this"],
+      "done_on_actions": ["goal_set", "home_practice_assign"]
     }
   }
 ]

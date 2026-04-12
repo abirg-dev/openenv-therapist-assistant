@@ -7,11 +7,7 @@ sdk: docker
 pinned: false
 app_port: 8000
 base_path: /web
-tags:
-  - openenv
-    - therapist
-    - assistant
-    - actions
+tags: [openenv, therapist, assistant, actions]
 short_description: Therapist-assistant env with configurable action fields
 ---
 
@@ -220,7 +216,7 @@ RiskScreenAction(
 - `echoed_message` (str) - Human-readable summary generated from the action
 - `message_length` (int) - Length of the echoed summary
 - `reward` (float) - Reward based on message length (length × 0.1)
-- `done` (bool) - Always False for echo environment
+- `done` (bool) - True when the current task's `done_on_actions` includes the submitted `action_type`; otherwise False
 - `metadata` (dict) - Additional info like step count
 
 ### Reward

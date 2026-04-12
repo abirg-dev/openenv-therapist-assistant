@@ -59,6 +59,32 @@ def test_task_payloads_can_include_reward_config() -> None:
     assert task.reward_config.action_bonus
 
 
+def test_done_on_actions_are_configured_for_terminal_tasks() -> None:
+    bank = TaskBank()
+    tasks = {task.task_id: task for task in bank.list_tasks()}
+
+    assert tasks["EASY-001"].reward_config is not None
+    assert tasks["EASY-001"].reward_config.done_on_actions == []
+    assert tasks["EASY-002"].reward_config is not None
+    assert tasks["EASY-002"].reward_config.done_on_actions == ["summarize_session"]
+    assert tasks["EASY-003"].reward_config is not None
+    assert tasks["EASY-003"].reward_config.done_on_actions == ["goal_set"]
+
+    assert tasks["MOD-001"].reward_config is not None
+    assert tasks["MOD-001"].reward_config.done_on_actions == []
+    assert tasks["MOD-002"].reward_config is not None
+    assert tasks["MOD-002"].reward_config.done_on_actions == ["goal_set"]
+    assert tasks["MOD-003"].reward_config is not None
+    assert tasks["MOD-003"].reward_config.done_on_actions == ["home_practice_assign"]
+
+    assert tasks["HARD-001"].reward_config is not None
+    assert tasks["HARD-001"].reward_config.done_on_actions == ["handoff_or_escalate"]
+    assert tasks["HARD-002"].reward_config is not None
+    assert tasks["HARD-002"].reward_config.done_on_actions == []
+    assert tasks["HARD-003"].reward_config is not None
+    assert tasks["HARD-003"].reward_config.done_on_actions == ["goal_set", "home_practice_assign"]
+
+
 def test_invalid_reward_config_weight_key_fails(tmp_path: Path) -> None:
     tasks_dir = tmp_path
     bad_task = {

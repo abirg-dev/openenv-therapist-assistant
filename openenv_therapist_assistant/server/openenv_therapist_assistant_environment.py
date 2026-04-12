@@ -15,11 +15,12 @@ action into a compact echoed summary string for fast end-to-end API testing.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 from uuid import uuid4
 
 from openenv.core.env_server.interfaces import Environment
-from openenv.core.env_server.types import State
+from openenv.core.env_server.types import EnvironmentMetadata, State
 
 try:
     from ..graders import TherapistAssistantGrader
@@ -68,10 +69,16 @@ class OpenenvTherapistAssistantEnvironment(Environment):
     # getting their own environment instance (when using factory mode in app.py).
     SUPPORTS_CONCURRENT_SESSIONS: bool = True
 
-    def __init__(self):
-        """Initialize environment state counters."""
+    def __init__(self, modality_profile: str = "balanced"):
+        """Initialize environment state counters.
+        
+        Args:
+            modality_profile: Therapeutic modality emphasis ('balanced', 'mi_leaning',
+                'cbt_leaning', 'psychodynamic_leaning'). Defaults to 'balanced'.
+        """
         self._state = State(episode_id=str(uuid4()), step_count=0)
-        self._grader = TherapistAssistantGrader()
+        self._modality_profile = modality_profile
+        self._grader = TherapistAssistantGrader(modality_profile=modality_profile)
         self._reset_count = 0
         self._phase = "engagement"
         self._high_risk = False
@@ -85,6 +92,7 @@ class OpenenvTherapistAssistantEnvironment(Environment):
         self,
         seed: int | None = None,
         difficulty: Literal["easy", "moderate", "hard"] | None = None,
+        modality_profile: str | None = None,
     ) -> OpenenvTherapistAssistantObservation:  # type: ignore[override]
         """
         Reset the environment and sample a therapist task.
@@ -92,10 +100,15 @@ class OpenenvTherapistAssistantEnvironment(Environment):
         Args:
             seed: Optional deterministic seed for task selection.
             difficulty: Optional difficulty filter (easy, moderate, hard).
+            modality_profile: Optional therapeutic modality emphasis. If provided, updates
+                the grader's profile for this and subsequent episodes.
 
         Returns:
             OpenenvTherapistAssistantObservation with a ready message
         """
+        if modality_profile is not None:
+            self._modality_profile = modality_profile
+            self._grader = TherapistAssistantGrader(modality_profile=modality_profile)
         return self._reset_impl(seed=seed, difficulty=difficulty)
 
     def step(self, action: OpenenvTherapistAssistantAction | dict) -> OpenenvTherapistAssistantObservation:  # type: ignore[override]
@@ -114,8 +127,9 @@ class OpenenvTherapistAssistantEnvironment(Environment):
         self,
         seed: int | None = None,
         difficulty: Literal["easy", "moderate", "hard"] | None = None,
+        modality_profile: str | None = None,
     ) -> OpenenvTherapistAssistantObservation:
-        return self.reset(seed=seed, difficulty=difficulty)
+        return self.reset(seed=seed, difficulty=difficulty, modality_profile=modality_profile)
 
     async def step_async(
         self,
@@ -146,8 +160,12 @@ class OpenenvTherapistAssistantEnvironment(Environment):
             done=False,
             reward=0.0,
             metadata={
+                "episode_id": self._state.episode_id,
                 "task": self._task_metadata(),
                 "step": self._state.step_count,
+                "phase": self._phase,
+                "last_action_type": self._last_action_type,
+                "modality_profile": self._modality_profile,
                 "task_selection": {
                     "seed": selected_seed,
                     "difficulty_requested": difficulty,
@@ -171,9 +189,12 @@ class OpenenvTherapistAssistantEnvironment(Environment):
             done=done,
             reward=reward,
             metadata={
+                "episode_id": self._state.episode_id,
                 "original_message": message,
                 "step": self._state.step_count,
                 "phase": self._phase,
+                "last_action_type": self._last_action_type,
+                "modality_profile": self._modality_profile,
                 "high_risk": self._high_risk,
                 "safety_addressed": self._safety_addressed,
                 "reward_breakdown": breakdown,
@@ -252,6 +273,20 @@ class OpenenvTherapistAssistantEnvironment(Environment):
         self._repeated_action_count = result.repeated_action_count
         self._last_action_type = result.last_action_type
         return result.reward, result.breakdown, result.done
+
+    def get_metadata(self) -> EnvironmentMetadata:
+        """Expose README content for the OpenEnv web interface metadata panel."""
+        readme_path = Path(__file__).resolve().parent.parent / "README.md"
+        readme_content: str | None = None
+        if readme_path.exists():
+            readme_content = readme_path.read_text(encoding="utf-8")
+
+        return EnvironmentMetadata(
+            name="openenv_therapist_assistant",
+            description="Therapist-assistant training environment with structured actions",
+            version="1.0.0",
+            readme_content=readme_content,
+        )
 
     @property
     def state(self) -> State:

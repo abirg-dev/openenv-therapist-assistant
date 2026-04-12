@@ -10,7 +10,7 @@
       "Uses at least one open-ended question",
       "Reflects or validates the client’s state"
     ],
-    "target_actions": ["check_in", "ask_open_question", "reflect_emotion", "validate_experience"],
+    "target_actions": ["check_in", "ask_open_question", "reflect_content", "reflect_emotion", "validate_experience"],
     "risk_level": "low",
     "reward_config": {
       "weights": {
@@ -20,10 +20,12 @@
       },
       "action_bonus": {
         "check_in": 0.10,
-        "ask_open_question": 0.06
+        "ask_open_question": 0.06,
+        "reflect_emotion": 0.06,
+        "validate_experience": 0.06
       },
-      "required_keywords": ["feel", "stress", "week"],
-      "forbidden_phrases": ["get over it"]
+      "required_keywords": ["feel", "stress", "support", "week", "since last session"],
+      "forbidden_phrases": ["get over it", "not a big deal", "calm down", "you are fine"]
     }
   },
   {
@@ -37,7 +39,7 @@
       "Separates the issues into a short list",
       "Ends with a concise summary"
     ],
-    "target_actions": ["ask_open_question", "clarify_or_probe", "summarize_session"],
+    "target_actions": ["ask_open_question", "clarify_or_probe", "reflect_content", "summarize_session"],
     "risk_level": "none",
     "reward_config": {
       "weights": {
@@ -46,12 +48,14 @@
       },
       "action_bonus": {
         "clarify_or_probe": 0.08,
-        "summarize_session": 0.06
+        "summarize_session": 0.08
       },
       "action_penalty": {
         "check_in": 0.06
       },
-      "required_keywords": ["sleep", "work", "partner"]
+      "required_keywords": ["sleep", "work", "partner", "pressure", "tension", "main concerns"],
+      "forbidden_phrases": ["just pick one", "that is not important", "you are overthinking"],
+      "done_on_actions": ["summarize_session"]
     }
   },
   {
@@ -65,7 +69,7 @@
       "Goal has a short time horizon",
       "Includes at least one success criterion"
     ],
-    "target_actions": ["summarize_session", "goal_set"],
+    "target_actions": ["summarize_session", "goal_set", "home_practice_assign"],
     "risk_level": "none",
     "reward_config": {
       "weights": {
@@ -74,9 +78,12 @@
       },
       "action_bonus": {
         "goal_set": 0.10,
-        "summarize_session": 0.07
+        "summarize_session": 0.07,
+        "home_practice_assign": 0.06
       },
-      "required_keywords": ["week", "goal", "realistic"]
+      "required_keywords": ["week", "goal", "realistic", "small step", "specific"],
+      "forbidden_phrases": ["do your best", "try harder", "just fix it"],
+      "done_on_actions": ["goal_set"]
     }
   }
 ]
