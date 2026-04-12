@@ -52,6 +52,7 @@ except ModuleNotFoundError:
 
 from fastapi.responses import HTMLResponse
 from fastapi.responses import RedirectResponse
+from fastapi.openapi.docs import get_swagger_ui_html
 from pydantic import BaseModel, Field
 
 
@@ -1381,6 +1382,27 @@ _WEB_UI_HTML = _WEB_UI_TEMPLATE_WITH_FIELDS
 def web_ui() -> HTMLResponse:
         """Browser demo UI for exercising therapist actions end-to-end."""
         return HTMLResponse(content=_WEB_UI_HTML)
+
+
+@app.get("/web/health", include_in_schema=False)
+def web_health_alias() -> dict[str, str]:
+    """Alias for health checks when the Space is served under /web base paths."""
+    return {"status": "ok"}
+
+
+@app.get("/web/openapi.json", include_in_schema=False)
+def web_openapi_alias() -> dict[str, Any]:
+    """Alias for OpenAPI schema when the Space is served under /web base paths."""
+    return app.openapi()
+
+
+@app.get("/web/docs", include_in_schema=False)
+def web_docs_alias() -> HTMLResponse:
+    """Alias for Swagger docs when the Space is served under /web base paths."""
+    return get_swagger_ui_html(
+        openapi_url="/web/openapi.json",
+        title="openenv_therapist_assistant - API Docs",
+    )
 
 
 @app.get("/", include_in_schema=False)

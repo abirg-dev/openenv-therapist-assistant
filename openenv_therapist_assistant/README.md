@@ -160,8 +160,8 @@ After deployment, your space will be available at:
 The deployed space includes:
 - **Web Interface** at `/web` - Interactive UI for exploring the environment
 - **Root redirect** from `/` to `/web` so visitors land on the therapist UI directly
-- **API Documentation** at `/docs` - Full OpenAPI/Swagger interface
-- **Health Check** at `/health` - Container health monitoring
+- **API Documentation** at `/docs` (or `/web/docs` in base-path deployments) - Full OpenAPI/Swagger interface
+- **Health Check** at `/health` (or `/web/health` in base-path deployments) - Container health monitoring
 - **WebSocket** at `/ws` - Persistent session endpoint for low-latency interactions
 
 ## Environment Details
