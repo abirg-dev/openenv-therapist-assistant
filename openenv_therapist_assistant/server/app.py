@@ -61,6 +61,10 @@ os.environ.setdefault(
     str(Path(__file__).resolve().parent.parent / "README.md"),
 )
 
+# Force the plain FastAPI app so our custom therapist UI is visible on Spaces.
+# The framework web UI would otherwise own /web and shadow this app's therapist-facing page.
+os.environ["ENABLE_WEB_INTERFACE"] = "false"
+
 
 # Create the app with web interface and README integration
 app = create_app(
