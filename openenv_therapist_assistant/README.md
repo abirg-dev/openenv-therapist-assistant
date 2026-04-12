@@ -6,7 +6,6 @@ colorTo: blue
 sdk: docker
 pinned: false
 app_port: 8000
-base_path: /web
 tags: [openenv, therapist, assistant, actions]
 short_description: Therapist-assistant env with configurable action fields
 ---
@@ -160,6 +159,7 @@ After deployment, your space will be available at:
 
 The deployed space includes:
 - **Web Interface** at `/web` - Interactive UI for exploring the environment
+- **Root redirect** from `/` to `/web` so visitors land on the therapist UI directly
 - **API Documentation** at `/docs` - Full OpenAPI/Swagger interface
 - **Health Check** at `/health` - Container health monitoring
 - **WebSocket** at `/ws` - Persistent session endpoint for low-latency interactions
